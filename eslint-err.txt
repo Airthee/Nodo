@@ -1,0 +1,18 @@
+npm warn Unknown env config "devdir". This will stop working in the next major version of npm.
+
+Oops! Something went wrong! :(
+
+ESLint: 10.0.1
+
+TypeError: Error while loading rule 'react/display-name': contextOrFilename.getFilename is not a function
+Occurred while linting /home/raphael/workspace/airthee/checklist/App.tsx
+    at resolveBasedir (/home/raphael/workspace/airthee/checklist/node_modules/eslint-plugin-react/lib/util/version.js:31:100)
+    at detectReactVersion (/home/raphael/workspace/airthee/checklist/node_modules/eslint-plugin-react/lib/util/version.js:85:19)
+    at getReactVersionFromContext (/home/raphael/workspace/airthee/checklist/node_modules/eslint-plugin-react/lib/util/version.js:116:25)
+    at testReactVersion (/home/raphael/workspace/airthee/checklist/node_modules/eslint-plugin-react/lib/util/version.js:181:28)
+    at usedPropTypesInstructions (/home/raphael/workspace/airthee/checklist/node_modules/eslint-plugin-react/lib/util/usedPropTypes.js:307:36)
+    at Components.componentRule (/home/raphael/workspace/airthee/checklist/node_modules/eslint-plugin-react/lib/util/Components.js:940:37)
+    at createRuleListeners (/home/raphael/workspace/airthee/checklist/node_modules/eslint/lib/linter/linter.js:497:15)
+    at /home/raphael/workspace/airthee/checklist/node_modules/eslint/lib/linter/linter.js:623:7
+    at Array.forEach (<anonymous>)
+    at runRules (/home/raphael/workspace/airthee/checklist/node_modules/eslint/lib/linter/linter.js:557:31)
