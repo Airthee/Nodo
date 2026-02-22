@@ -1,32 +1,58 @@
 # Nodo (Expo + Bun)
 
-Application de listes de tâches type Google Keep : listes nommées, items coché/décoché, suggestions à partir des items déjà cochés, tri (alphabétique / dernier ajout). Stockage local. Architecture hexagonale pour réutilisation du cœur métier côté web plus tard.
+Task list app similar to Google Keep: named lists, check/uncheck items, suggestions from already checked items, sorting (alphabetical / last added). Local storage. Hexagonal architecture for reuse of the business core on the web later.
 
 ## Stack
 
-- **Bun** – gestion des dépendances et scripts
+- **Bun** – dependency and script management
 - **Expo** – React Native (Android, iOS, web)
 - **TypeScript**
 
-## Commandes
+## Commands
 
 ```bash
 bun install
 bun run start    # Expo dev server
-bun run android  # Lance sur Android
-bun run ios      # Lance sur iOS (macOS)
-bun run web      # Lance en web
+bun run android  # Run on Android
+bun run ios      # Run on iOS (macOS)
+bun run web      # Run on web
 ```
 
-## Structure (hexagonale)
+## Android Build
 
-- `src/domain` – Entités (Checklist, ChecklistItem), sans dépendance
-- `src/application` – Ports (storage) et use cases (list, get, save, create, toggle, add/remove item)
-- `src/infrastructure` – Adaptateur stockage (AsyncStorage)
-- `src/presentation` – Thème (surchargeable), contexte, écrans et composants React Native
+### Option 1: EAS Build (recommended)
 
-Le domaine et l’application sont en TypeScript pur, réutilisables par une future app web.
+Build in the cloud via [Expo Application Services](https://expo.dev/eas). Requires an Expo account (free).
 
-## Thème
+```bash
+bunx eas-cli login
+bunx eas-cli build:configure   # creates eas.json if needed
+bunx eas-cli build --platform android
+```
 
-Style par défaut type Material/Android. Pour surcharger : envelopper l’app avec `<ThemeProvider initialTheme={customTheme}>` ou utiliser `useTheme().setTheme(...)`.
+- **APK** (debug or release): add `--profile preview` or configure a profile in `eas.json` with `"buildType": "apk"`.
+- **AAB** (default): for Play Store publication.
+
+### Option 2: Local build
+
+Generates the native Android project then builds with Gradle. Prerequisites: Android SDK, `ANDROID_HOME` environment variable.
+
+```bash
+bunx expo prebuild --platform android
+cd android && ./gradlew assembleRelease
+```
+
+The APK is in `android/app/build/outputs/apk/release/`. For AAB (Play Store): `./gradlew bundleRelease` → `android/app/build/outputs/bundle/release/`.
+
+## Structure (hexagonal)
+
+- `src/domain` – Entities (Checklist, ChecklistItem), no dependencies
+- `src/application` – Ports (storage) and use cases (list, get, save, create, toggle, add/remove item)
+- `src/infrastructure` – Storage adapter (AsyncStorage)
+- `src/presentation` – Theme (overridable), context, screens and React Native components
+
+Domain and application are plain TypeScript, reusable by a future web app.
+
+## Theme
+
+Default Material/Android-style theme. To override: wrap the app with `<ThemeProvider initialTheme={customTheme}>` or use `useTheme().setTheme(...)`.
