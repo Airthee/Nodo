@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import type { Checklist } from '../../domain/checklist';
 import { useTheme } from '../theme/ThemeContext';
 import { useTranslation } from '../../i18n';
+import { styles } from './ChecklistCard.style';
 
 type Props = {
   checklist: Checklist;
@@ -33,18 +34,4 @@ export function ChecklistCard({ checklist, onPress, onLongPress }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  card: {
-    padding: 16,
-    borderRadius: 8,
-    borderWidth: 1,
-    marginBottom: 8,
-  },
-  title: {
-    fontWeight: '500',
-  },
-  subtitle: {
-    marginTop: 4,
-    opacity: 0.9,
-  },
-});
+

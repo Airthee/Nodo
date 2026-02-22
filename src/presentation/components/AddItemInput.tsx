@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, ScrollView } from 'react-native';
 import type { ChecklistItem } from '../../domain/checklist-item';
 import { useTheme } from '../theme/ThemeContext';
 import { useTranslation } from '../../i18n';
+import { styles } from './AddItemInput.style';
 
 type Props = {
   checkedItemLabels: string[];
@@ -94,30 +95,4 @@ export function AddItemInput({
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    marginBottom: 8,
-  },
-  inputRow: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
-  input: {
-    paddingVertical: 12,
-    paddingHorizontal: 4,
-  },
-  suggestions: {
-    marginTop: 8,
-    maxHeight: 40,
-  },
-  suggestionsContent: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  chip: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 20,
-    borderWidth: 1,
-  },
-  chipText: {},
-});
+
