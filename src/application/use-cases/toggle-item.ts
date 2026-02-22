@@ -1,4 +1,4 @@
-import type { Checklist } from '../../domain/checklist';
+import { Checklist } from '../../domain/checklist';
 import type { ChecklistStoragePort } from '../ports/storage-port';
 
 export class ToggleItemUseCase {
@@ -10,9 +10,15 @@ export class ToggleItemUseCase {
 
     const itemIndex = checklist.items.findIndex((item) => item.id === itemId);
     if (itemIndex === -1) return null;
-    checklist.items[itemIndex] = checklist.items[itemIndex].toggle();
 
-    await this.storage.save(checklist);
-    return checklist;
+    const items = checklist.items.map((item, i) =>
+      i === itemIndex ? item.toggle() : item,
+    );
+    const updated = Checklist.create(checklist.id, checklist.name, {
+      items,
+      createdAt: checklist.createdAt,
+    });
+    await this.storage.save(updated);
+    return updated;
   }
 }
