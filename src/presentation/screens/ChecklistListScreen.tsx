@@ -12,6 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import type { Checklist } from '../../domain/checklist';
 import { useChecklistActions } from '../context/ChecklistContext';
 import { useTheme } from '../theme/ThemeContext';
+import { useTranslation } from '../../i18n';
 import { ChecklistCard } from '../components/ChecklistCard';
 import { styles } from './ChecklistListScreen.style';
 
@@ -21,6 +22,7 @@ type Props = {
 
 export function ChecklistListScreen({ onSelectChecklist }: Props) {
   const { theme } = useTheme();
+  const { t } = useTranslation();
   const { listChecklists, createChecklist, deleteChecklist } = useChecklistActions();
   const [checklists, setChecklists] = useState<Checklist[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -46,12 +48,12 @@ export function ChecklistListScreen({ onSelectChecklist }: Props) {
 
   const handleLongPress = (checklist: Checklist) => {
     Alert.alert(
-      'Supprimer',
-      `Supprimer la liste « ${checklist.name} » ?`,
+      t('common.delete'),
+      t('listScreen.deleteConfirmMessage', { name: checklist.name }),
       [
-        { text: 'Annuler', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'Supprimer',
+          text: t('common.delete'),
           style: 'destructive',
           onPress: async () => {
             await deleteChecklist.execute(checklist.id);
@@ -66,7 +68,7 @@ export function ChecklistListScreen({ onSelectChecklist }: Props) {
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]} edges={['top']}>
       <View style={[styles.header, { borderBottomColor: theme.colors.border }]}>
         <Text style={[styles.title, { color: theme.colors.text, ...theme.typography.title }]}>
-          Mes listes
+          {t('listScreen.title')}
         </Text>
       </View>
       <FlatList
@@ -88,7 +90,7 @@ export function ChecklistListScreen({ onSelectChecklist }: Props) {
                 { color: theme.colors.textSecondary, ...theme.typography.body },
               ]}
             >
-              Aucune liste pour le moment, cliquez sur + pour créer votre première liste
+              {t('listScreen.empty')}
             </Text>
           </View>
         }
@@ -119,7 +121,7 @@ export function ChecklistListScreen({ onSelectChecklist }: Props) {
             onPress={(e) => e.stopPropagation()}
           >
             <Text style={[styles.modalTitle, { color: theme.colors.text }]}>
-              Nouvelle liste
+              {t('listScreen.newListTitle')}
             </Text>
             <TextInput
               style={[
@@ -132,7 +134,7 @@ export function ChecklistListScreen({ onSelectChecklist }: Props) {
               ]}
               value={newName}
               onChangeText={setNewName}
-              placeholder="Nom de la liste"
+              placeholder={t('listScreen.listNamePlaceholder')}
               placeholderTextColor={theme.colors.textSecondary}
               autoFocus
             />
@@ -141,13 +143,13 @@ export function ChecklistListScreen({ onSelectChecklist }: Props) {
                 style={[styles.modalButton, { borderColor: theme.colors.border }]}
                 onPress={() => setModalVisible(false)}
               >
-                <Text style={{ color: theme.colors.text }}>Annuler</Text>
+                <Text style={{ color: theme.colors.text }}>{t('common.cancel')}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.modalButton, { backgroundColor: theme.colors.primary }]}
                 onPress={handleAddChecklist}
               >
-                <Text style={styles.modalButtonPrimaryText}>Créer</Text>
+                <Text style={styles.modalButtonPrimaryText}>{t('common.create')}</Text>
               </TouchableOpacity>
             </View>
           </TouchableOpacity>

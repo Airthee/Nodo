@@ -9,6 +9,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import type { Checklist } from '../../domain/checklist';
 import { useChecklistActions } from '../context/ChecklistContext';
 import { useTheme } from '../theme/ThemeContext';
+import { useTranslation } from '../../i18n';
 import { ChecklistItemRow } from '../components/ChecklistItemRow';
 import { AddItemInput } from '../components/AddItemInput';
 import { SortPicker } from '../components/SortPicker';
@@ -24,6 +25,7 @@ type Props = {
 
 export function ChecklistDetailScreen({ checklistId, onBack }: Props) {
   const { theme } = useTheme();
+  const { t } = useTranslation();
   const {
     getChecklist,
     toggleItem: toggleItemAction,
@@ -67,7 +69,7 @@ export function ChecklistDetailScreen({ checklistId, onBack }: Props) {
   if (!checklist) {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]} edges={['top']}>
-        <Text style={{ color: theme.colors.textSecondary }}>Chargement…</Text>
+        <Text style={{ color: theme.colors.textSecondary }}>{t('detailScreen.loading')}</Text>
       </SafeAreaView>
     );
   }
@@ -79,7 +81,7 @@ export function ChecklistDetailScreen({ checklistId, onBack }: Props) {
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]} edges={['top']}>
       <View style={[styles.header, { borderBottomColor: theme.colors.border, flexDirection: 'row', justifyContent: 'space-between' }]}>
         <TouchableOpacity onPress={onBack} style={styles.backButton} hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}>
-          <Text style={[styles.backText, { color: theme.colors.primary }]}>← Retour</Text>
+          <Text style={[styles.backText, { color: theme.colors.primary }]}>{t('detailScreen.back')}</Text>
         </TouchableOpacity>
         <Text style={[styles.title, { color: theme.colors.text, ...theme.typography.title }]} numberOfLines={1}>
           {checklist.name}
@@ -104,7 +106,7 @@ export function ChecklistDetailScreen({ checklistId, onBack }: Props) {
           )}
           ListEmptyComponent={
             <Text style={[styles.empty, { color: theme.colors.textSecondary }]}>
-              Aucun élément. Saisissez-en un ci-dessus.
+              {t('detailScreen.empty')}
             </Text>
           }
         />

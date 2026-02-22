@@ -1,0 +1,35 @@
+{
+  "common": {
+    "cancel": "Annuler",
+    "create": "Créer",
+    "delete": "Supprimer",
+    "save": "Enregistrer"
+  },
+  "listScreen": {
+    "title": "Mes listes",
+    "empty": "Aucune liste pour le moment, cliquez sur + pour créer votre première liste",
+    "newListTitle": "Nouvelle liste",
+    "listNamePlaceholder": "Nom de la liste",
+    "deleteConfirmMessage": "Supprimer la liste « {{name}} » ?"
+  },
+  "detailScreen": {
+    "back": "← Retour",
+    "loading": "Chargement…",
+    "empty": "Aucun élément. Saisissez-en un ci-dessus."
+  },
+  "addItem": {
+    "placeholder": "Ajouter un élément"
+  },
+  "card": {
+    "noItems": "Aucun élément",
+    "remaining": "{{count}} / {{total}} restants"
+  },
+  "sort": {
+    "lastAdded": "Derniers ajoutés",
+    "alphabetical": "Alphabétique"
+  },
+  "itemRow": {
+    "editLabelTitle": "Modifier le libellé",
+    "labelPlaceholder": "Libellé"
+  }
+}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, ScrollView } from 'react-native';
 import type { ChecklistItem } from '../../domain/checklist-item';
 import { useTheme } from '../theme/ThemeContext';
+import { useTranslation } from '../../i18n';
 
 type Props = {
   checkedItemLabels: string[];
@@ -12,10 +13,12 @@ type Props = {
 export function AddItemInput({
   checkedItemLabels,
   onSubmit,
-  placeholder = 'Ajouter un élément',
+  placeholder,
 }: Props) {
   const { theme } = useTheme();
+  const { t } = useTranslation();
   const [value, setValue] = useState('');
+  const resolvedPlaceholder = placeholder ?? t('addItem.placeholder');
 
   const q = value.trim().toLowerCase();
   const suggestions = !q
@@ -48,7 +51,7 @@ export function AddItemInput({
           ]}
           value={value}
           onChangeText={setValue}
-          placeholder={placeholder}
+          placeholder={resolvedPlaceholder}
           placeholderTextColor={theme.colors.textSecondary}
           onSubmitEditing={handleSubmit}
           returnKeyType="done"

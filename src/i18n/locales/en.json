@@ -1,0 +1,35 @@
+{
+  "common": {
+    "cancel": "Cancel",
+    "create": "Create",
+    "delete": "Delete",
+    "save": "Save"
+  },
+  "listScreen": {
+    "title": "My lists",
+    "empty": "No lists yet, tap + to create your first list",
+    "newListTitle": "New list",
+    "listNamePlaceholder": "List name",
+    "deleteConfirmMessage": "Delete the list « {{name}} »?"
+  },
+  "detailScreen": {
+    "back": "← Back",
+    "loading": "Loading…",
+    "empty": "No items. Add one above."
+  },
+  "addItem": {
+    "placeholder": "Add an item"
+  },
+  "card": {
+    "noItems": "No items",
+    "remaining": "{{count}} / {{total}} remaining"
+  },
+  "sort": {
+    "lastAdded": "Last added",
+    "alphabetical": "Alphabetical"
+  },
+  "itemRow": {
+    "editLabelTitle": "Edit label",
+    "labelPlaceholder": "Label"
+  }
+}

@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import type { ChecklistItem as ChecklistItemType } from '../../domain/checklist-item';
 import { useTheme } from '../theme/ThemeContext';
+import { useTranslation } from '../../i18n';
 
 type Props = {
   item: ChecklistItemType;
@@ -21,6 +22,7 @@ type Props = {
 
 export function ChecklistItemRow({ item, onToggle, onDelete, onEditLabel }: Props) {
   const { theme } = useTheme();
+  const { t } = useTranslation();
   const [editVisible, setEditVisible] = useState(false);
   const [draftLabel, setDraftLabel] = useState(item.label);
 
@@ -102,7 +104,7 @@ export function ChecklistItemRow({ item, onToggle, onDelete, onEditLabel }: Prop
               style={[styles.modalContent, { backgroundColor: theme.colors.surface }]}
             >
               <Text style={[styles.modalTitle, { color: theme.colors.text }]}>
-                Modifier le libellé
+                {t('itemRow.editLabelTitle')}
               </Text>
               <TextInput
                 style={[
@@ -115,7 +117,7 @@ export function ChecklistItemRow({ item, onToggle, onDelete, onEditLabel }: Prop
                 ]}
                 value={draftLabel}
                 onChangeText={setDraftLabel}
-                placeholder="Libellé"
+                placeholder={t('itemRow.labelPlaceholder')}
                 placeholderTextColor={theme.colors.textSecondary}
                 autoFocus
                 selectTextOnFocus
@@ -125,13 +127,13 @@ export function ChecklistItemRow({ item, onToggle, onDelete, onEditLabel }: Prop
                   style={[styles.modalButton, { borderColor: theme.colors.border }]}
                   onPress={() => setEditVisible(false)}
                 >
-                  <Text style={{ color: theme.colors.textSecondary }}>Annuler</Text>
+                  <Text style={{ color: theme.colors.textSecondary }}>{t('common.cancel')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={[styles.modalButton, styles.modalButtonPrimary, { backgroundColor: theme.colors.primary }]}
                   onPress={saveEdit}
                 >
-                  <Text style={styles.modalButtonPrimaryText}>Enregistrer</Text>
+                  <Text style={styles.modalButtonPrimaryText}>{t('common.save')}</Text>
                 </TouchableOpacity>
               </View>
             </TouchableOpacity>
