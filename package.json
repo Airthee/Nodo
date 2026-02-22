@@ -22,12 +22,12 @@
     "react-native-svg": "^15.15.3"
   },
   "devDependencies": {
-    "@types/react": "~19.1.0",
+    "@types/react": "~19.1.17",
     "eslint": "^10.0.1",
     "eslint-config-expo": "^10.0.0",
     "eslint-plugin-react-compiler": "^19.1.0-rc.2",
     "react-native-svg-transformer": "^1.5.3",
-    "typescript": "~5.9.2"
+    "typescript": "~5.9.3"
   },
   "private": true
 }
