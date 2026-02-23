@@ -4,6 +4,7 @@
   "main": "index.ts",
   "scripts": {
     "release": "release-it",
+    "release:ci": "release-it --ci",
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",

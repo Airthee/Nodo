@@ -1,12 +1,15 @@
 {
   "git": {
+    "commit": true,
     "commitMessage": "chore: release v${version}",
+    "tag": true,
     "tagName": "v${version}",
     "push": true
   },
   "github": {
     "release": true,
-    "releaseName": "Release ${version}"
+    "releaseName": "Release ${version}",
+    "host": "github.com"
   },
   "npm": {
     "publish": false
