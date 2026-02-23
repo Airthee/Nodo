@@ -1,0 +1,13 @@
+---
+description: All comments, text, and codebase must be in English
+alwaysApply: true
+---
+
+# English-only codebase
+
+- **Comments**: Write all comments in English (in code, configs, workflows, docs).
+- **Strings / UI text**: User-facing or log messages should be in English unless explicitly localized.
+- **Documentation**: README, docs, and inline explanations must be in English.
+- **Naming**: Prefer English for variable names, function names, commit messages, and branch names.
+
+When adding or editing code, keep the entire codebase consistent in English.
