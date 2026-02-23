@@ -1,0 +1,17 @@
+{
+  "git": {
+    "commitMessage": "chore: release v${version}",
+    "tagName": "v${version}",
+    "push": true
+  },
+  "github": {
+    "release": true,
+    "releaseName": "Release ${version}"
+  },
+  "npm": {
+    "publish": false
+  },
+  "hooks": {
+    "before:commit": "node scripts/sync-expo-version.js"
+  }
+}

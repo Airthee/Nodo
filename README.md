@@ -18,6 +18,22 @@ bun run ios      # Run on iOS (macOS)
 bun run web      # Run on web
 ```
 
+## Releases (release-it + GitHub)
+
+Les releases sont gérées par [release-it](https://github.com/release-it/release-it) : bump de version (package.json + app.json), tag git, push et création de la release GitHub.
+
+```bash
+bun run release        # interactif (choix du bump, message, etc.)
+bun run release -- minor --ci   # bump minor en mode CI (non interactif)
+```
+
+À chaque **publication** d’une release GitHub, une GitHub Action :
+
+1. Lance un build Android en local (expo prebuild + Gradle) → APK
+2. Attache l’artefact `nodo-android.apk` à la release (pas de publication Play Store)
+
+Aucun secret requis (build en CI, pas EAS).
+
 ## Android Build
 
 ### Option 1: EAS Build (recommended)
