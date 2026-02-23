@@ -1,8 +1,8 @@
-# À chaque publication de release GitHub :
-# 1. Build Android en local (expo prebuild + Gradle) → APK
-# 2. Attache l’APK à la release (pas de publication Play Store)
+# On each GitHub release publish:
+# 1. Build Android locally (expo prebuild + Gradle) → APK
+# 2. Attach the APK to the release (no Play Store publish)
 #
-# Aucun secret requis.
+# No secrets required.
 
 name: Release build
 
@@ -13,6 +13,8 @@ on:
 jobs:
   build-and-attach:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # required to attach the APK to the release
     steps:
       - name: Checkout
         uses: actions/checkout@v4
