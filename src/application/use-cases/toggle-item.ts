@@ -11,9 +11,13 @@ export class ToggleItemUseCase {
     const itemIndex = checklist.items.findIndex((item) => item.id === itemId);
     if (itemIndex === -1) return null;
 
-    const items = checklist.items.map((item, i) =>
-      i === itemIndex ? item.toggle() : item,
-    );
+    const toggledItem = checklist.items[itemIndex]?.toggle();
+    if (!toggledItem) return null;
+
+    const items = [
+      ...checklist.items.filter((item) => item.id !== itemId),
+      toggledItem,
+    ];
     const updated = Checklist.create(checklist.id, checklist.name, {
       items,
       createdAt: checklist.createdAt,
