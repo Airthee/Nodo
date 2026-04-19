@@ -30,4 +30,16 @@ export const styles = StyleSheet.create({
     paddingVertical: 24,
     textAlign: 'center',
   },
+  checkedSection: {
+    marginTop: 20,
+    paddingBottom: 16,
+  },
+  checkedSectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
+  checkedSectionTitle: {
+    fontWeight: '500',
+  },
 });

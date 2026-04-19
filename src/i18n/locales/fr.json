@@ -15,7 +15,8 @@
   "detailScreen": {
     "back": "← Retour",
     "loading": "Chargement…",
-    "empty": "Aucun élément. Saisissez-en un ci-dessus."
+    "empty": "Aucun élément. Saisissez-en un ci-dessus.",
+    "checkedSectionTitle": "Éléments cochés ({{count}})"
   },
   "addItem": {
     "placeholder": "Ajouter un élément"

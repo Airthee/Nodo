@@ -15,7 +15,8 @@
   "detailScreen": {
     "back": "← Back",
     "loading": "Loading…",
-    "empty": "No items. Add one above."
+    "empty": "No items. Add one above.",
+    "checkedSectionTitle": "Checked items ({{count}})"
   },
   "addItem": {
     "placeholder": "Add an item"

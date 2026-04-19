@@ -76,7 +76,7 @@ export function ChecklistItemRow({ item, onToggle, onDelete, onEditLabel }: Prop
         <TouchableOpacity
           onPress={onDelete}
           hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-          style={[styles.deleteButton, { borderColor: theme.colors.border }]}
+          style={styles.deleteButton}
           activeOpacity={0.6}
         >
           <Text style={[styles.deleteIcon, { color: theme.colors.textSecondary }]}>×</Text>
@@ -143,5 +143,4 @@ export function ChecklistItemRow({ item, onToggle, onDelete, onEditLabel }: Prop
     </>
   );
 }
-
 

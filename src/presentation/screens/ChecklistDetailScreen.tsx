@@ -4,7 +4,6 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { Checklist } from '../../domain/checklist';
@@ -36,6 +35,7 @@ export function ChecklistDetailScreen({ checklistId, onBack }: Props) {
   } = useChecklistActions();
   const [checklist, setChecklist] = useState<Checklist | null>(null);
   const [sortOrder, setSortOrder] = useState<ItemSortOrder>('lastAdded');
+  const [checkedSectionExpanded, setCheckedSectionExpanded] = useState(false);
 
   async function load() {
     const data = await getChecklist.execute(checklistId);
@@ -77,6 +77,8 @@ export function ChecklistDetailScreen({ checklistId, onBack }: Props) {
 
   const checkedLabels = checklist.items.filter((i) => i.checked).map((i) => i.label);
   const sortedItems = sortChecklistItems(checklist.items, sortOrder);
+  const uncheckedItems = sortedItems.filter((item) => !item.checked);
+  const checkedItems = sortedItems.filter((item) => item.checked);
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]} edges={['top']}>
@@ -95,7 +97,7 @@ export function ChecklistDetailScreen({ checklistId, onBack }: Props) {
         />
         <SortPicker value={sortOrder} onChange={setSortOrder} />
         <FlatList
-          data={sortedItems}
+          data={uncheckedItems}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <ChecklistItemRow
@@ -105,15 +107,54 @@ export function ChecklistDetailScreen({ checklistId, onBack }: Props) {
               onEditLabel={(newLabel) => handleUpdateItemLabel(item.id, newLabel)}
             />
           )}
+          ListFooterComponent={
+            checkedItems.length > 0 ? (
+              <View style={styles.checkedSection}>
+                <TouchableOpacity
+                  style={[
+                    styles.checkedSectionHeader,
+                  ]}
+                  onPress={() => setCheckedSectionExpanded((current) => !current)}
+                  activeOpacity={0.7}
+                  accessibilityRole="button"
+                >
+                  <Text
+                    style={[
+                      styles.checkedSectionTitle,
+                      {
+                        color: theme.colors.textSecondary,
+                        ...theme.typography.caption,
+                      },
+                    ]}
+                  >
+                    {t('detailScreen.checkedSectionTitle', { count: checkedItems.length })} {checkedSectionExpanded ? '▾' : '▸'}
+                  </Text>
+                </TouchableOpacity>
+                {checkedSectionExpanded ? (
+                  <>
+                    {checkedItems.map((item) => (
+                      <ChecklistItemRow
+                        key={item.id}
+                        item={item}
+                        onToggle={() => handleToggle(item.id)}
+                        onDelete={() => handleRemoveItem(item.id)}
+                        onEditLabel={(newLabel) => handleUpdateItemLabel(item.id, newLabel)}
+                      />
+                    ))}
+                  </>
+                ) : null}
+              </View>
+            ) : null
+          }
           ListEmptyComponent={
-            <Text style={[styles.empty, { color: theme.colors.textSecondary }]}>
-              {t('detailScreen.empty')}
-            </Text>
+            checklist.items.length === 0 ? (
+              <Text style={[styles.empty, { color: theme.colors.textSecondary }]}>
+                {t('detailScreen.empty')}
+              </Text>
+            ) : null
           }
         />
       </View>
     </SafeAreaView>
   );
 }
-
-

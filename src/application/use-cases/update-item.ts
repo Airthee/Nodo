@@ -9,7 +9,7 @@ export class UpdateItemUseCase {
     if (!checklist) return null;
     const trimmed = newLabel.trim();
     const items = checklist.items.map((item) =>
-      item.id === itemId ? { ...item, label: trimmed } : item,
+      item.id === itemId ? item.withLabel(trimmed) : item,
     );
     const updated = { ...checklist, items };
     await this.storage.save(updated);

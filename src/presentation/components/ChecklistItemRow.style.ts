@@ -20,13 +20,9 @@ export const styles = StyleSheet.create({
   },
   label: {},
   deleteButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    borderWidth: StyleSheet.hairlineWidth,
-    alignItems: 'center',
-    justifyContent: 'center',
     marginLeft: 8,
+    paddingHorizontal: 4,
+    paddingVertical: 2,
   },
   deleteIcon: {
     fontSize: 22,
