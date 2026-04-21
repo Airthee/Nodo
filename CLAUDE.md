@@ -1,3 +1,18 @@
+# Project Guidelines
+
+Refer to [GUIDELINE.md](./GUIDELINE.md) for the full set of project guidelines (language, style, conventions). Follow them when adding or editing code.
+
+## Dependency Management with Bun
+
+This project uses **Bun** as its package manager and runtime.
+
+- **Install dependencies**: `bun install` (not `npm install` or `yarn`)
+- **Add a dependency**: `bun add <package>`
+- **Add a devDependency**: `bun add -d <package>`
+- **Run a script**: `bun run <script>` or `bun <script>` (e.g. `bun start`, `bun run lint`)
+
+When suggesting or executing commands for installation, adding packages, or running scripts, always use Bun.
+
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 

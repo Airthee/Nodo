@@ -1,9 +1,6 @@
----
-description: All comments, text, and codebase must be in English
-alwaysApply: true
----
+# Project Guidelines
 
-# English-only codebase
+## English-only codebase
 
 - **Comments**: Write all comments in English (in code, configs, workflows, docs).
 - **Strings / UI text**: User-facing or log messages should be in English unless explicitly localized.
