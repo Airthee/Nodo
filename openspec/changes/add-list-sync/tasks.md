@@ -13,23 +13,23 @@
 
 ## 2. packages/shared skeleton
 
-- [ ] 2.1 Create `packages/shared/` with `package.json` (name `@nodo/shared`, private, ESM, no platform deps), `tsconfig.json` extending `tsconfig.base.json`, and `src/index.ts`
-- [ ] 2.2 Add `zod` as a dependency to `packages/shared`
-- [ ] 2.3 Define DTO Zod schemas in `src/dto/`: `OperationDto`, `OperationBatchDto`, `SnapshotDto`, `ErrorDto`
-- [ ] 2.4 Define a platform-agnostic `CryptoAdapter` interface (`encryptAesGcm`, `decryptAesGcm`, `randomBytes`, `hkdfSha256`) in `src/crypto/types.ts`
-- [ ] 2.5 Define a `MnemonicAdapter` interface (`generate24Words`, `phraseToSeed`, `validatePhrase`) in `src/mnemonic/types.ts`
-- [ ] 2.6 Implement `deriveShareId(seed)` and `deriveEncryptionKey(seed)` using the injected `CryptoAdapter`
-- [ ] 2.7 Set up a unit test runner in the package (Bun test) and add unit tests for the derivation helpers (deterministic across calls, distinct outputs, expected lengths)
+- [x] 2.1 Create `packages/shared/` with `package.json` (name `@nodo/shared`, private, ESM, no platform deps), `tsconfig.json` extending `tsconfig.base.json`, and `src/index.ts`
+- [x] 2.2 Add `zod` as a dependency to `packages/shared`
+- [x] 2.3 Define DTO Zod schemas in `src/dto/`: `OperationDto`, `OperationBatchDto`, `SnapshotDto`, `ErrorDto`
+- [x] 2.4 Define a platform-agnostic `CryptoAdapter` interface (`encryptAesGcm`, `decryptAesGcm`, `randomBytes`, `hkdfSha256`) in `src/crypto/types.ts`
+- [x] 2.5 Define a `MnemonicAdapter` interface (`generate24Words`, `phraseToSeed`, `validatePhrase`) in `src/mnemonic/types.ts`
+- [x] 2.6 Implement `deriveShareId(seed)` and `deriveEncryptionKey(seed)` using the injected `CryptoAdapter`
+- [x] 2.7 Set up a unit test runner in the package (Bun test) and add unit tests for the derivation helpers (deterministic across calls, distinct outputs, expected lengths)
 
 ## 3. CRDT in packages/shared
 
-- [ ] 3.1 Define `VersionMeta = { ts: number; deviceId: string }` and `compareVersion(a, b)` returning `-1 | 0 | 1` (ts ASC, deviceId ASC)
-- [ ] 3.2 Define `ChecklistItemState`, `ChecklistState`, and `Operation` types matching the design (per-field `versions`, `deletedAt` tombstone)
-- [ ] 3.3 Implement `applyOperation(state, op)` returning new state, idempotent, with the LWW field-level rule
-- [ ] 3.4 Implement `mergeStates(a, b)` for snapshot reconciliation (used on first sync) — equivalent to applying every op of one onto the other
-- [ ] 3.5 Implement `nextLocalTs(shareClock)` enforcing `max(Date.now(), shareClock + 1)` and a `bumpClock(shareClock, remoteTs)` helper
-- [ ] 3.6 Unit-test toggle-vs-toggle, label-vs-toggle, delete-vs-edit (both orders), tie-break on equal ts, idempotence on duplicate apply, and Lamport bump
-- [ ] 3.7 Add fast-check property tests asserting commutativity, associativity, and idempotence over random op sequences
+- [x] 3.1 Define `VersionMeta = { ts: number; deviceId: string }` and `compareVersion(a, b)` returning `-1 | 0 | 1` (ts ASC, deviceId ASC)
+- [x] 3.2 Define `ChecklistItemState`, `ChecklistState`, and `Operation` types matching the design (per-field `versions`, `deletedAt` tombstone)
+- [x] 3.3 Implement `applyOperation(state, op)` returning new state, idempotent, with the LWW field-level rule
+- [x] 3.4 Implement `mergeStates(a, b)` for snapshot reconciliation (used on first sync) — equivalent to applying every op of one onto the other
+- [x] 3.5 Implement `nextLocalTs(shareClock)` enforcing `max(Date.now(), shareClock + 1)` and a `bumpClock(shareClock, remoteTs)` helper
+- [x] 3.6 Unit-test toggle-vs-toggle, label-vs-toggle, delete-vs-edit (both orders), tie-break on equal ts, idempotence on duplicate apply, and Lamport bump
+- [x] 3.7 Add fast-check property tests asserting commutativity, associativity, and idempotence over random op sequences
 
 ## 4. apps/server skeleton
 
