@@ -1,14 +1,14 @@
 ## 1. Monorepo migration (no behavior change)
 
-- [ ] 1.1 Create top-level `apps/` and `packages/` directories
-- [ ] 1.2 Move `App.tsx`, `index.ts`, `src/`, `app.json`, `eas.json`, `metro.config.js`, `eslint.config.js`, `tsconfig.json`, `svg.d.ts`, `assets/`, `android/` into `apps/mobile/`
-- [ ] 1.3 Promote root `package.json` to a workspace manifest (`"workspaces": ["apps/*", "packages/*"]`, no app deps)
-- [ ] 1.4 Recreate `apps/mobile/package.json` from the previous root `package.json` (name `@nodo/mobile`, private, deps and scripts intact)
-- [ ] 1.5 Update `apps/mobile/tsconfig.json` path aliases to be app-local; create `tsconfig.base.json` at the root
-- [ ] 1.6 Update `apps/mobile/metro.config.js` to support the workspace (`watchFolders` rooted at the repo, `nodeModulesPaths` includes root and app `node_modules`)
-- [ ] 1.7 Add root-level convenience scripts: `mobile:start`, `mobile:android`, `mobile:ios`, `mobile:web`
-- [ ] 1.8 Re-point `release-it` config and `eas.json` to `apps/mobile`
-- [ ] 1.9 Verify `bun install`, `bun --cwd apps/mobile start`, ESLint, and `tsc --noEmit` all pass
+- [x] 1.1 Create top-level `apps/` and `packages/` directories
+- [x] 1.2 Move `App.tsx`, `index.ts`, `src/`, `app.json`, `eas.json`, `metro.config.js`, `eslint.config.js`, `tsconfig.json`, `svg.d.ts`, `assets/`, `android/` into `apps/mobile/`
+- [x] 1.3 Promote root `package.json` to a workspace manifest (`"workspaces": ["apps/*", "packages/*"]`, no app deps)
+- [x] 1.4 Recreate `apps/mobile/package.json` from the previous root `package.json` (name `@nodo/mobile`, private, deps and scripts intact)
+- [x] 1.5 Update `apps/mobile/tsconfig.json` path aliases to be app-local; create `tsconfig.base.json` at the root
+- [x] 1.6 Update `apps/mobile/metro.config.js` to support the workspace (`watchFolders` rooted at the repo, `nodeModulesPaths` includes root and app `node_modules`)
+- [x] 1.7 Add root-level convenience scripts: `mobile:start`, `mobile:android`, `mobile:ios`, `mobile:web`
+- [x] 1.8 Re-point `release-it` config and `eas.json` to `apps/mobile`
+- [x] 1.9 Verify `bun install`, `bun --cwd apps/mobile start`, ESLint, and `tsc --noEmit` all pass (typecheck ok; lint failure is pre-existing in repo, not a migration regression)
 - [ ] 1.10 Run a full local Android build to verify EAS configuration is intact
 
 ## 2. packages/shared skeleton

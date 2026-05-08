@@ -37,6 +37,6 @@ yarn-error.*
 *.tsbuildinfo
 
 # generated native folders
-/ios
-/android
+/apps/mobile/ios
+/apps/mobile/android
 .gitnexus
