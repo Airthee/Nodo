@@ -3,7 +3,8 @@
     "cancel": "Cancel",
     "create": "Create",
     "delete": "Delete",
-    "save": "Save"
+    "save": "Save",
+    "ok": "OK"
   },
   "listScreen": {
     "title": "My lists",
@@ -16,7 +17,8 @@
     "back": "← Back",
     "loading": "Loading…",
     "empty": "No items. Add one above.",
-    "checkedSectionTitle": "Checked items ({{count}})"
+    "checkedSectionTitle": "Checked items ({{count}})",
+    "notFound": "This list no longer exists."
   },
   "addItem": {
     "placeholder": "Add an item"

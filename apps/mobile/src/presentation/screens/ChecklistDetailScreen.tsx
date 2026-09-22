@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useEffectEvent } from 'react';
 import {
   View,
   Text,
   FlatList,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { Checklist } from '../../domain/checklist';
@@ -38,12 +39,23 @@ export function ChecklistDetailScreen({ checklistId, onBack }: Props) {
   const [sortOrder, setSortOrder] = useState<ItemSortOrder>('lastAdded');
   const [checkedSectionExpanded, setCheckedSectionExpanded] = useState(false);
 
+  const handleMissingChecklist = useEffectEvent(() => {
+    Alert.alert(
+      t('errors.title'),
+      t('detailScreen.notFound'),
+      [{ text: t('common.ok'), onPress: onBack }],
+      { cancelable: false }
+    );
+  });
+
   useEffect(() => {
     let cancelled = false;
     getChecklist
       .execute(checklistId)
       .then((data) => {
-        if (!cancelled) setChecklist(data);
+        if (cancelled) return;
+        if (data) setChecklist(data);
+        else handleMissingChecklist();
       })
       .catch(reportError);
     return () => {

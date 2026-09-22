@@ -3,7 +3,8 @@
     "cancel": "Annuler",
     "create": "Créer",
     "delete": "Supprimer",
-    "save": "Enregistrer"
+    "save": "Enregistrer",
+    "ok": "OK"
   },
   "listScreen": {
     "title": "Mes listes",
@@ -16,7 +17,8 @@
     "back": "← Retour",
     "loading": "Chargement…",
     "empty": "Aucun élément. Saisissez-en un ci-dessus.",
-    "checkedSectionTitle": "Éléments cochés ({{count}})"
+    "checkedSectionTitle": "Éléments cochés ({{count}})",
+    "notFound": "Cette liste n'existe plus."
   },
   "addItem": {
     "placeholder": "Ajouter un élément"
