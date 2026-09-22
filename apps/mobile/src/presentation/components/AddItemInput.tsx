@@ -63,6 +63,7 @@ export function AddItemInput({
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
           style={styles.suggestions}
           contentContainerStyle={styles.suggestionsContent}
         >
