@@ -6,14 +6,8 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
     "experiments": {
       "reactCompiler": true
-    },
-    "splash": {
-      "image": "./assets/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
     },
     "ios": {
       "supportsTablet": true
@@ -24,11 +18,21 @@
         "monochromeImage": "./assets/monochrome-icon.png",
         "backgroundColor": "#1a73e8"
       },
-      "edgeToEdgeEnabled": true,
       "package": "com.airthee.nodo"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-localization",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ]
+    ]
   }
 }

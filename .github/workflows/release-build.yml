@@ -27,7 +27,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
@@ -43,7 +43,7 @@ jobs:
 
       - name: Install Android platform and build-tools
         run: |
-          sdkmanager "platforms;android-34" "build-tools;34.0.0"
+          sdkmanager "platforms;android-36" "build-tools;36.0.0"
 
       - name: Expo prebuild (Android)
         working-directory: apps/mobile

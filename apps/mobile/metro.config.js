@@ -1,18 +1,7 @@
 const { getDefaultConfig } = require('expo/metro-config');
-const path = require('path');
-
-const projectRoot = __dirname;
-const workspaceRoot = path.resolve(projectRoot, '../..');
 
 /** @type {import('expo/metro-config').MetroConfig} */
-const config = getDefaultConfig(projectRoot);
-
-config.watchFolders = [workspaceRoot];
-config.resolver.nodeModulesPaths = [
-  path.resolve(projectRoot, 'node_modules'),
-  path.resolve(workspaceRoot, 'node_modules'),
-];
-config.resolver.disableHierarchicalLookup = true;
+const config = getDefaultConfig(__dirname);
 
 const { transformer, resolver } = config;
 
@@ -21,7 +10,7 @@ config.transformer = {
   babelTransformerPath: require.resolve('react-native-svg-transformer'),
 };
 config.resolver = {
-  ...config.resolver,
+  ...resolver,
   assetExts: resolver.assetExts.filter((ext) => ext !== 'svg'),
   sourceExts: [...resolver.sourceExts, 'svg'],
 };
