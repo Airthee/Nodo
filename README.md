@@ -10,12 +10,16 @@ Task list app similar to Google Keep: named lists, check/uncheck items, suggesti
 
 ## Commands
 
+Run from the repository root (Bun workspaces monorepo):
+
 ```bash
 bun install
-bun run start    # Expo dev server
-bun run android  # Run on Android
-bun run ios      # Run on iOS (macOS)
-bun run web      # Run on web
+bun run mobile:start    # Expo dev server
+bun run mobile:android  # Run on Android
+bun run mobile:ios      # Run on iOS (macOS)
+bun run mobile:web      # Run on web
+bun run mobile:lint     # Lint the mobile app
+bun run shared:test     # Run @nodo/shared tests
 ```
 
 ## Releases (release-it + GitHub)
@@ -41,6 +45,7 @@ Aucun secret requis (build en CI, pas EAS).
 Build in the cloud via [Expo Application Services](https://expo.dev/eas). Requires an Expo account (free).
 
 ```bash
+cd apps/mobile
 bunx eas-cli login
 bunx eas-cli build:configure   # creates eas.json if needed
 bunx eas-cli build --platform android
@@ -54,11 +59,12 @@ bunx eas-cli build --platform android
 Generates the native Android project then builds with Gradle. Prerequisites: Android SDK, `ANDROID_HOME` environment variable.
 
 ```bash
+cd apps/mobile
 bunx expo prebuild --platform android
 cd android && ./gradlew assembleRelease
 ```
 
-The APK is in `android/app/build/outputs/apk/release/`. For AAB (Play Store): `./gradlew bundleRelease` → `android/app/build/outputs/bundle/release/`.
+The APK is in `apps/mobile/android/app/build/outputs/apk/release/`. For AAB (Play Store): `./gradlew bundleRelease` → `apps/mobile/android/app/build/outputs/bundle/release/`.
 
 ## Structure (hexagonal)
 
