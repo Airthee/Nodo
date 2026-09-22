@@ -33,23 +33,23 @@
 
 ## 4. apps/server skeleton
 
-- [ ] 4.1 Create `apps/server/` with `package.json` (name `@nodo/server`, private, deps: `hono`, `zod`, `@nodo/shared` via workspace, dev: `@types/bun`)
-- [ ] 4.2 Create `apps/server/tsconfig.json` extending `tsconfig.base.json`
-- [ ] 4.3 Wire a `bun run dev` script that runs `bun --hot src/index.ts`
-- [ ] 4.4 Create `src/index.ts` with a Hono app, `/healthz`, and structured JSON request logging that never logs ciphertext bodies
-- [ ] 4.5 Create the SQLite schema bootstrap (`shares`, `ops`) on first run using `bun:sqlite`; place migrations in `src/db/migrations/`
-- [ ] 4.6 Implement input validation middleware that enforces 32-hex `shareId` and rejects malformed requests with 400
+- [x] 4.1 Create `apps/server/` with `package.json` (name `@nodo/server`, private, deps: `hono`, `zod`, `@nodo/shared` via workspace, dev: `@types/bun`)
+- [x] 4.2 Create `apps/server/tsconfig.json` extending `tsconfig.base.json`
+- [x] 4.3 Wire a `bun run dev` script that runs `bun --hot src/index.ts`
+- [x] 4.4 Create `src/index.ts` with a Hono app, `/healthz`, and structured JSON request logging that never logs ciphertext bodies
+- [x] 4.5 Create the SQLite schema bootstrap (`shares`, `ops`) on first run using `bun:sqlite`; place migrations in `src/db/migrations/`
+- [x] 4.6 Implement input validation middleware that enforces 32-hex `shareId` and rejects malformed requests with 400
 
 ## 5. Sync server endpoints
 
-- [ ] 5.1 Implement `POST /shares/:shareId/ops` — validate body (Zod), assign monotonic `seq` per share inside a single transaction, persist, return assigned seqs
-- [ ] 5.2 Implement `GET /shares/:shareId/ops?since=` — return ops ordered by `seq` ASC, capped at 1000, with the highest `seq` echoed for pagination
-- [ ] 5.3 Implement `GET /shares/:shareId/snapshot` and `PUT /shares/:shareId/snapshot` with `expectedSeq` CAS (return 409 on mismatch)
-- [ ] 5.4 Implement `DELETE /shares/:shareId` — set `deleted_at`; subsequent GETs return 410 Gone
-- [ ] 5.5 Implement an in-memory `SseHub` (`Map<shareId, Set<Stream>>`) and `GET /shares/:shareId/stream` returning `text/event-stream`; on each accepted POST, fan out the new op
-- [ ] 5.6 Emit a `shareDeleted` event from the SSE hub when a DELETE succeeds and close affected streams
-- [ ] 5.7 Implement per-IP and per-shareId rate limiting middleware (token bucket); return 429 with `Retry-After` when exceeded
-- [ ] 5.8 Add integration tests covering: push/pull round-trip, pagination, snapshot CAS conflict, 410 Gone after delete, SSE fan-out (two subscribers + one publisher), 400 on malformed shareId
+- [x] 5.1 Implement `POST /shares/:shareId/ops` — validate body (Zod), assign monotonic `seq` per share inside a single transaction, persist, return assigned seqs
+- [x] 5.2 Implement `GET /shares/:shareId/ops?since=` — return ops ordered by `seq` ASC, capped at 1000, with the highest `seq` echoed for pagination
+- [x] 5.3 Implement `GET /shares/:shareId/snapshot` and `PUT /shares/:shareId/snapshot` with `expectedSeq` CAS (return 409 on mismatch)
+- [x] 5.4 Implement `DELETE /shares/:shareId` — set `deleted_at`; subsequent GETs return 410 Gone
+- [x] 5.5 Implement an in-memory `SseHub` (`Map<shareId, Set<Stream>>`) and `GET /shares/:shareId/stream` returning `text/event-stream`; on each accepted POST, fan out the new op
+- [x] 5.6 Emit a `shareDeleted` event from the SSE hub when a DELETE succeeds and close affected streams
+- [x] 5.7 Implement per-IP and per-shareId rate limiting middleware (token bucket); return 429 with `Retry-After` when exceeded
+- [x] 5.8 Add integration tests covering: push/pull round-trip, pagination, snapshot CAS conflict, 410 Gone after delete, SSE fan-out (two subscribers + one publisher), 400 on malformed shareId
 
 ## 6. Mobile crypto and BIP39 adapters
 
