@@ -15,6 +15,7 @@ import { AddItemInput } from '../components/AddItemInput';
 import { SortPicker } from '../components/SortPicker';
 import { sortChecklistItems, type ItemSortOrder } from '../utils/sort-items';
 import { generateId } from '../../application/utils/id';
+import { reportError } from '../utils/report-error';
 import { ChecklistItem } from '@domain/checklist-item';
 import { styles } from './ChecklistDetailScreen.style';
 
@@ -39,38 +40,62 @@ export function ChecklistDetailScreen({ checklistId, onBack }: Props) {
 
   useEffect(() => {
     let cancelled = false;
-    getChecklist.execute(checklistId).then((data) => {
-      if (!cancelled) setChecklist(data);
-    });
+    getChecklist
+      .execute(checklistId)
+      .then((data) => {
+        if (!cancelled) setChecklist(data);
+      })
+      .catch(reportError);
     return () => {
       cancelled = true;
     };
   }, [checklistId, getChecklist]);
 
   async function handleToggle(itemId: string) {
-    const next = await toggleItemAction.execute(checklistId, itemId);
-    if (next) setChecklist(next);
+    try {
+      const next = await toggleItemAction.execute(checklistId, itemId);
+      if (next) setChecklist(next);
+    } catch (error) {
+      reportError(error);
+    }
   }
 
   async function handleAddItem(label: string) {
     const item = ChecklistItem.create(generateId(), label, { checked: false });
-    const next = await addItemAction.execute(checklistId, item);
-    if (next) setChecklist(next);
+    try {
+      const next = await addItemAction.execute(checklistId, item);
+      if (next) setChecklist(next);
+    } catch (error) {
+      reportError(error);
+    }
   }
 
   async function handleRemoveItem(itemId: string) {
-    const next = await removeItemAction.execute(checklistId, itemId);
-    if (next) setChecklist(next);
+    try {
+      const next = await removeItemAction.execute(checklistId, itemId);
+      if (next) setChecklist(next);
+    } catch (error) {
+      reportError(error);
+    }
   }
 
   async function handleUpdateItemLabel(itemId: string, newLabel: string) {
-    const next = await updateItemAction.execute(checklistId, itemId, newLabel);
-    if (next) setChecklist(next);
+    try {
+      const next = await updateItemAction.execute(checklistId, itemId, newLabel);
+      if (next) setChecklist(next);
+    } catch (error) {
+      reportError(error);
+    }
   }
 
   if (!checklist) {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]} edges={['top']}>
+        <View style={[styles.header, { borderBottomColor: theme.colors.border }]}>
+          <TouchableOpacity onPress={onBack} style={styles.backButton} hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}>
+            <Text style={[styles.backText, { color: theme.colors.primary }]}>{t('detailScreen.back')}</Text>
+          </TouchableOpacity>
+        </View>
         <Text style={{ color: theme.colors.textSecondary }}>{t('detailScreen.loading')}</Text>
       </SafeAreaView>
     );

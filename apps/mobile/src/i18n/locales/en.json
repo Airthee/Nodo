@@ -32,5 +32,9 @@
   "itemRow": {
     "editLabelTitle": "Edit label",
     "labelPlaceholder": "Label"
+  },
+  "errors": {
+    "title": "Error",
+    "storage": "Something went wrong while accessing your data. Please try again."
   }
 }

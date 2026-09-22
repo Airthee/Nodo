@@ -32,5 +32,9 @@
   "itemRow": {
     "editLabelTitle": "Modifier le libellé",
     "labelPlaceholder": "Libellé"
+  },
+  "errors": {
+    "title": "Erreur",
+    "storage": "Un problème est survenu lors de l'accès à vos données. Veuillez réessayer."
   }
 }

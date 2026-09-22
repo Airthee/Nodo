@@ -14,6 +14,7 @@ import { useChecklistActions } from '../context/ChecklistContext';
 import { useTheme } from '../theme/ThemeContext';
 import { useTranslation } from '../../i18n';
 import { ChecklistCard } from '../components/ChecklistCard';
+import { reportError } from '../utils/report-error';
 import { styles } from './ChecklistListScreen.style';
 
 type Props = {
@@ -29,15 +30,22 @@ export function ChecklistListScreen({ onSelectChecklist }: Props) {
   const [newName, setNewName] = useState('');
 
   async function load() {
-    const list = await listChecklists.execute();
-    setChecklists(list);
+    try {
+      const list = await listChecklists.execute();
+      setChecklists(list);
+    } catch (error) {
+      reportError(error);
+    }
   }
 
   useEffect(() => {
     let cancelled = false;
-    listChecklists.execute().then((list) => {
-      if (!cancelled) setChecklists(list);
-    });
+    listChecklists
+      .execute()
+      .then((list) => {
+        if (!cancelled) setChecklists(list);
+      })
+      .catch(reportError);
     return () => {
       cancelled = true;
     };
@@ -46,7 +54,12 @@ export function ChecklistListScreen({ onSelectChecklist }: Props) {
   const handleAddChecklist = async () => {
     const name = newName.trim();
     if (!name) return;
-    await createChecklist.execute(name);
+    try {
+      await createChecklist.execute(name);
+    } catch (error) {
+      reportError(error);
+      return;
+    }
     setNewName('');
     setModalVisible(false);
     load();
@@ -62,7 +75,12 @@ export function ChecklistListScreen({ onSelectChecklist }: Props) {
           text: t('common.delete'),
           style: 'destructive',
           onPress: async () => {
-            await deleteChecklist.execute(checklist.id);
+            try {
+              await deleteChecklist.execute(checklist.id);
+            } catch (error) {
+              reportError(error);
+              return;
+            }
             load();
           },
         },
