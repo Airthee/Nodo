@@ -12,6 +12,9 @@
     "mobile:ios": "bun --cwd apps/mobile run ios",
     "mobile:web": "bun --cwd apps/mobile run web",
     "mobile:lint": "bun --cwd apps/mobile run lint",
+    "server:dev": "bun --cwd apps/server run dev",
+    "server:test": "bun --cwd apps/server test",
+    "shared:test": "bun --cwd packages/shared test",
     "release": "bun --cwd apps/mobile run release",
     "release:ci": "bun --cwd apps/mobile run release:ci"
   }
