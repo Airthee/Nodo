@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Sync package.json version into app.json (expo.version).
- * Used by release-it before:release hook.
+ * Used by release-it after:bump hook (runs before the release commit).
  */
 const fs = require("fs");
 const path = require("path");

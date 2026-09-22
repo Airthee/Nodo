@@ -15,6 +15,6 @@
     "publish": false
   },
   "hooks": {
-    "before:commit": "node scripts/sync-expo-version.js"
+    "after:bump": "node scripts/sync-expo-version.js"
   }
 }
