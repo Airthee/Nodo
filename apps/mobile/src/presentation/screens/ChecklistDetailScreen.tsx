@@ -37,13 +37,14 @@ export function ChecklistDetailScreen({ checklistId, onBack }: Props) {
   const [sortOrder, setSortOrder] = useState<ItemSortOrder>('lastAdded');
   const [checkedSectionExpanded, setCheckedSectionExpanded] = useState(false);
 
-  async function load() {
-    const data = await getChecklist.execute(checklistId);
-    setChecklist(data);
-  }
-
   useEffect(() => {
-    load();
+    let cancelled = false;
+    getChecklist.execute(checklistId).then((data) => {
+      if (!cancelled) setChecklist(data);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [checklistId, getChecklist]);
 
   async function handleToggle(itemId: string) {

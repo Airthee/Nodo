@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
 import type { Checklist } from '../../domain/checklist';
 import { useTheme } from '../theme/ThemeContext';
 import { useTranslation } from '../../i18n';

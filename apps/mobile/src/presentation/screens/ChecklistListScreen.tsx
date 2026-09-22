@@ -34,7 +34,13 @@ export function ChecklistListScreen({ onSelectChecklist }: Props) {
   }
 
   useEffect(() => {
-    load();
+    let cancelled = false;
+    listChecklists.execute().then((list) => {
+      if (!cancelled) setChecklists(list);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [listChecklists]);
 
   const handleAddChecklist = async () => {

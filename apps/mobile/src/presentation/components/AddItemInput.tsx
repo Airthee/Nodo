@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, ScrollView } from 'react-native';
-import type { ChecklistItem } from '../../domain/checklist-item';
 import { useTheme } from '../theme/ThemeContext';
 import { useTranslation } from '../../i18n';
 import { styles } from './AddItemInput.style';
