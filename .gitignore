@@ -39,3 +39,10 @@ yarn-error.*
 # generated native folders
 /apps/mobile/ios
 /apps/mobile/android
+
+# server runtime
+/apps/server/*.sqlite
+/apps/server/*.sqlite-journal
+/apps/server/*.sqlite-wal
+/apps/server/*.sqlite-shm
+.envrc
