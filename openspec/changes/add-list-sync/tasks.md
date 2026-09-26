@@ -6,7 +6,7 @@
 - [x] 1.4 Recreate `apps/mobile/package.json` from the previous root `package.json` (name `@nodo/mobile`, private, deps and scripts intact)
 - [x] 1.5 Update `apps/mobile/tsconfig.json` path aliases to be app-local; create `tsconfig.base.json` at the root
 - [x] 1.6 Update `apps/mobile/metro.config.js` to support the workspace (`watchFolders` rooted at the repo, `nodeModulesPaths` includes root and app `node_modules`)
-- [x] 1.7 Add root-level convenience scripts: `mobile:start`, `mobile:android`, `mobile:ios`, `mobile:web`
+- [x] 1.7 Add root-level convenience scripts: `mobile:start`, `mobile:android`, `mobile:ios`
 - [x] 1.8 Re-point `release-it` config and `eas.json` to `apps/mobile`
 - [x] 1.9 Verify `bun install`, `bun --cwd apps/mobile start`, ESLint, and `tsc --noEmit` all pass (typecheck ok; lint failure is pre-existing in repo, not a migration regression)
 - [ ] 1.10 Run a full local Android build to verify EAS configuration is intact
@@ -27,7 +27,7 @@
 - [x] 3.2 Define `ChecklistItemState`, `ChecklistState`, and `Operation` types matching the design (per-field `versions`, `deletedAt` tombstone)
 - [x] 3.3 Implement `applyOperation(state, op)` returning new state, idempotent, with the LWW field-level rule
 - [x] 3.4 Implement `mergeStates(a, b)` for snapshot reconciliation (used on first sync) — equivalent to applying every op of one onto the other
-- [x] 3.5 Implement `nextLocalTs(shareClock)` enforcing `max(Date.now(), shareClock + 1)` and a `bumpClock(shareClock, remoteTs)` helper
+- [x] 3.5 Implement `createDeviceClock()` whose `next()` enforces `max(Date.now(), last + 1)` and whose `observe(remoteTs)` folds in remote timestamps
 - [x] 3.6 Unit-test toggle-vs-toggle, label-vs-toggle, delete-vs-edit (both orders), tie-break on equal ts, idempotence on duplicate apply, and Lamport bump
 - [x] 3.7 Add fast-check property tests asserting commutativity, associativity, and idempotence over random op sequences
 
@@ -63,7 +63,7 @@
 
 - [ ] 7.1 Extend `Checklist` with `name` version meta, `shareId?: string`, `deletedAt?: VersionMeta`
 - [ ] 7.2 Extend `ChecklistItem` with per-field `versions: { label, checked }` and `deletedAt?: VersionMeta`
-- [ ] 7.3 Update use-cases (`add-item`, `toggle-item`, `update-item`, `remove-item`, `create-checklist`, `delete-checklist`, `save-checklist`) to bump version metadata and call `nextLocalTs`
+- [ ] 7.3 Update use-cases (`add-item`, `toggle-item`, `update-item`, `remove-item`, `create-checklist`, `delete-checklist`, `save-checklist`) to bump version metadata with the share's `createDeviceClock().next()`
 - [ ] 7.4 Update `AsyncStorageAdapter` to (de)serialize the new fields and to filter tombstoned items/lists from default reads
 - [ ] 7.5 Implement a one-shot migration in the adapter: detect legacy schema, backfill `versions = { ts, deviceId: localDeviceId }`, write a `schemaVersion` marker; idempotent on re-run
 - [ ] 7.6 Generate and persist a stable local `deviceId` (UUID v4) on first launch in `AsyncStorage`

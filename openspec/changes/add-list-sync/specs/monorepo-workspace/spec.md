@@ -86,7 +86,7 @@ The `@nodo/shared` package SHALL contain the CRDT merge logic, encryption interf
 
 ### Requirement: Backwards-compatible developer entry points
 
-The migration SHALL provide root-level scripts that mirror the most common pre-migration commands so muscle memory keeps working: `bun run mobile:start`, `bun run mobile:android`, `bun run mobile:ios`, `bun run mobile:web`, `bun run server:dev`, `bun run shared:test`. These SHALL be thin shims that delegate to the appropriate workspace.
+The migration SHALL provide root-level scripts that mirror the most common pre-migration commands so muscle memory keeps working: `bun run mobile:start`, `bun run mobile:android`, `bun run mobile:ios`, `bun run server:dev`, `bun run shared:test`. These SHALL be thin shims that delegate to the appropriate workspace.
 
 #### Scenario: Root-level shim launches the mobile app
 
