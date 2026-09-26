@@ -113,10 +113,10 @@ export function ChecklistDetailScreen({ checklistId, onBack }: Props) {
     );
   }
 
-  const checkedLabels = checklist.items.filter((i) => i.checked).map((i) => i.label);
   const sortedItems = sortChecklistItems(checklist.items, sortOrder);
   const uncheckedItems = sortedItems.filter((item) => !item.checked);
   const checkedItems = sortedItems.filter((item) => item.checked);
+  const checkedLabels = checkedItems.map((item) => item.label);
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]} edges={['top']}>
