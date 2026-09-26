@@ -5,24 +5,15 @@ export class ToggleItemUseCase {
   public constructor(private readonly storage: ChecklistStoragePort) {}
 
   async execute(checklistId: string, itemId: string): Promise<Checklist | null> {
-    const checklist = await this.storage.getById(checklistId);
-    if (!checklist) return null;
+    let found = false;
+    const updated = await this.storage.update(checklistId, (current) => {
+      const toggledItem = current.items.find((item) => item.id === itemId)?.toggle();
+      if (!toggledItem) return current;
+      found = true;
 
-    const itemIndex = checklist.items.findIndex((item) => item.id === itemId);
-    if (itemIndex === -1) return null;
-
-    const toggledItem = checklist.items[itemIndex]?.toggle();
-    if (!toggledItem) return null;
-
-    const items = [
-      ...checklist.items.filter((item) => item.id !== itemId),
-      toggledItem,
-    ];
-    const updated = Checklist.create(checklist.id, checklist.name, {
-      items,
-      createdAt: checklist.createdAt,
+      const items = [...current.items.filter((item) => item.id !== itemId), toggledItem];
+      return Checklist.create(current.id, current.name, { items, createdAt: current.createdAt });
     });
-    await this.storage.save(updated);
-    return updated;
+    return found ? updated : null;
   }
 }

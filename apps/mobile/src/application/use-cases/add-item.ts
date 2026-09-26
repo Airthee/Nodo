@@ -1,29 +1,23 @@
-import type { Checklist } from '../../domain/checklist';
+import { Checklist } from '../../domain/checklist';
 import type { ChecklistItem } from '../../domain/checklist-item';
 import type { ChecklistStoragePort } from '../ports/storage-port';
+
+const normalize = (label: string) => label.trim().toLowerCase();
 
 export class AddItemUseCase {
   public constructor(private readonly storage: ChecklistStoragePort) {}
 
-  async execute(checklistId: string, item: ChecklistItem): Promise<Checklist | null> {
-    const checklist = await this.storage.getById(checklistId);
-    if (!checklist) return null;
+  execute(checklistId: string, item: ChecklistItem): Promise<Checklist | null> {
+    return this.storage.update(checklistId, (current) => {
+      const normalized = normalize(item.label);
+      const existing = current.items.find((i) => normalize(i.label) === normalized);
 
-    const normalized = item.label.toLowerCase();
-    const existing = checklist.items.find((i) => i.label.toLowerCase() === normalized);
+      // Re-adding an existing label revives it (unchecked, fresh addedAt) and keeps its id.
+      const items = existing
+        ? current.items.map((i) => (i.id === existing.id ? existing.revive(item.addedAt) : i))
+        : [...current.items, item];
 
-    if (existing) {
-      if (!existing.checked) return checklist;
-      const toggled = existing.toggle();
-      const items = checklist.items.map((i) => (i.id === existing.id ? toggled : i));
-      const updated = { ...checklist, items };
-      await this.storage.save(updated);
-      return updated;
-    }
-
-    const items = [...checklist.items, item];
-    const updated = { ...checklist, items };
-    await this.storage.save(updated);
-    return updated;
+      return Checklist.create(current.id, current.name, { items, createdAt: current.createdAt });
+    });
   }
 }
