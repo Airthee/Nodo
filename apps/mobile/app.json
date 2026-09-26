@@ -20,9 +20,6 @@
       },
       "package": "com.airthee.nodo"
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
     "plugins": [
       "expo-localization",
       [

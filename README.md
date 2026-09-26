@@ -5,7 +5,7 @@ Task list app similar to Google Keep: named lists, check/uncheck items, suggesti
 ## Stack
 
 - **Bun** – dependency and script management
-- **Expo** – React Native (Android, iOS, web)
+- **Expo** – React Native (Android, iOS)
 - **TypeScript**
 
 ## Commands
@@ -17,7 +17,6 @@ bun install
 bun run mobile:start    # Expo dev server
 bun run mobile:android  # Run on Android
 bun run mobile:ios      # Run on iOS (macOS)
-bun run mobile:web      # Run on web
 bun run mobile:lint     # Lint the mobile app
 bun run shared:test     # Run @nodo/shared tests
 ```
