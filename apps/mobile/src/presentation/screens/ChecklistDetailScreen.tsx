@@ -137,6 +137,8 @@ export function ChecklistDetailScreen({ checklistId, onBack }: Props) {
         <FlatList
           data={uncheckedItems}
           keyExtractor={(item) => item.id}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
           renderItem={({ item }) => (
             <ChecklistItemRow
               item={item}
