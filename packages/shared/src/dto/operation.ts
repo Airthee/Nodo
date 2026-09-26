@@ -3,6 +3,7 @@ import { z } from 'zod';
 const SHARE_ID_HEX = /^[0-9a-f]{32}$/;
 const BASE64 = /^[A-Za-z0-9+/=]+$/;
 
+// Canonical wire form: 32 lower-case hex chars. Clients normalize with normalizeShareIdHex().
 export const ShareIdSchema = z.string().regex(SHARE_ID_HEX, 'shareId must be 32 hex chars');
 
 export const DeviceIdSchema = z.string().uuid();

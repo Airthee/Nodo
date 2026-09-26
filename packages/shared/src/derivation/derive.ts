@@ -33,6 +33,7 @@ export function shareIdToHex(shareId: Uint8Array): string {
   return Array.from(shareId, (b) => b.toString(16).padStart(2, '0')).join('');
 }
 
+// Accepts either case; use normalizeShareIdHex() to get the canonical wire form.
 export function shareIdFromHex(hex: string): Uint8Array {
   if (hex.length !== SHARE_ID_LENGTH_BYTES * 2) {
     throw new Error(`Invalid shareId hex length: ${hex.length}`);
@@ -45,4 +46,10 @@ export function shareIdFromHex(hex: string): Uint8Array {
     out[i] = parseInt(hex.slice(i * 2, i * 2 + 2), 16);
   }
   return out;
+}
+
+// Returns the canonical lower-case wire form accepted by ShareIdSchema.
+// Throws on invalid input, like shareIdFromHex().
+export function normalizeShareIdHex(hex: string): string {
+  return shareIdToHex(shareIdFromHex(hex));
 }

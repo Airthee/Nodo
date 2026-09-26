@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'bun:test';
+import fc from 'fast-check';
 import {
   applyOperation,
   applyOperations,
   mergeStates,
   compareVersion,
-  bumpClock,
-  nextLocalTs,
+  createDeviceClock,
   isItemAlive,
   type ChecklistState,
   type Operation,
@@ -34,19 +34,57 @@ describe('compareVersion', () => {
   });
 });
 
-describe('clock helpers', () => {
-  it('nextLocalTs is at least shareClock + 1', () => {
-    const past = Date.now() - 10_000_000;
-    expect(nextLocalTs(past)).toBeGreaterThan(past);
-
-    const future = Date.now() + 10_000_000;
-    expect(nextLocalTs(future)).toBe(future + 1);
+describe('createDeviceClock', () => {
+  it('issues strictly increasing ts when now() is frozen', () => {
+    const clock = createDeviceClock(0, () => 1_000);
+    const a = clock.next();
+    const b = clock.next();
+    expect(a).toBe(1_000);
+    expect(b).toBeGreaterThan(a);
   });
 
-  it('bumpClock moves only forward', () => {
-    expect(bumpClock(100, 200)).toBe(200);
-    expect(bumpClock(200, 100)).toBe(200);
-    expect(bumpClock(50, 50)).toBe(50);
+  it('observing a future ts makes the next ts exceed it', () => {
+    const clock = createDeviceClock(0, () => 1_000);
+    clock.observe(5_000);
+    expect(clock.next()).toBeGreaterThan(5_000);
+  });
+
+  it('observing a past ts does not move the clock back', () => {
+    const clock = createDeviceClock(0, () => 1_000);
+    const issued = clock.next();
+    clock.observe(10);
+    expect(clock.current()).toBe(issued);
+    expect(clock.next()).toBeGreaterThan(issued);
+  });
+
+  it('seeds current() with the initial value', () => {
+    const clock = createDeviceClock(42, () => 0);
+    expect(clock.current()).toBe(42);
+    expect(clock.next()).toBe(43);
+  });
+
+  it('issues a strictly increasing ts sequence for any next/observe interleaving', () => {
+    const step = fc.oneof(
+      fc.record({ kind: fc.constant('next' as const), now: fc.integer({ min: 0, max: 1_000_000 }) }),
+      fc.record({ kind: fc.constant('observe' as const), ts: fc.integer({ min: 0, max: 1_000_000 }) }),
+    );
+    fc.assert(
+      fc.property(fc.integer({ min: 0, max: 1_000_000 }), fc.array(step, { maxLength: 50 }), (initial, steps) => {
+        let now = 0;
+        const clock = createDeviceClock(initial, () => now);
+        const issued: number[] = [];
+        for (const s of steps) {
+          if (s.kind === 'next') {
+            now = s.now;
+            issued.push(clock.next());
+          } else {
+            clock.observe(s.ts);
+          }
+        }
+        return issued.every((ts, i) => i === 0 || ts > issued[i - 1]!);
+      }),
+      { numRuns: 200 },
+    );
   });
 });
 

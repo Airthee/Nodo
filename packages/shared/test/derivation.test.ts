@@ -4,6 +4,8 @@ import {
   deriveEncryptionKey,
   shareIdToHex,
   shareIdFromHex,
+  normalizeShareIdHex,
+  ShareIdSchema,
   ENC_KEY_LENGTH_BYTES,
   SHARE_ID_LENGTH_BYTES,
   type CryptoAdapter,
@@ -101,5 +103,17 @@ describe('derivation', () => {
   it('rejects invalid shareId hex', () => {
     expect(() => shareIdFromHex('abc')).toThrow();
     expect(() => shareIdFromHex('z'.repeat(32))).toThrow();
+  });
+
+  it('normalizes upper-case shareId hex to the canonical lower-case form', () => {
+    const upper = 'A1B2C3D4E5F60718293A4B5C6D7E8F90';
+    const normalized = normalizeShareIdHex(upper);
+    expect(normalized).toBe(upper.toLowerCase());
+    expect(ShareIdSchema.safeParse(normalized).success).toBe(true);
+  });
+
+  it('normalizeShareIdHex throws on invalid input', () => {
+    expect(() => normalizeShareIdHex('abc')).toThrow();
+    expect(() => normalizeShareIdHex('z'.repeat(32))).toThrow();
   });
 });
