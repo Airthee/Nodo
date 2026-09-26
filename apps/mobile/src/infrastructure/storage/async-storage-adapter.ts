@@ -18,13 +18,16 @@ function rehydrateChecklist(raw: RawChecklist): Checklist {
 export class AsyncStorageAdapter implements ChecklistStoragePort {
   private cache: Checklist[] | null = null;
   private loading: Promise<Checklist[]> | null = null;
+  // Tail of the write chain; it never rejects. Reads await it for read-your-writes.
   private queue: Promise<void> = Promise.resolve();
 
   async getAll(): Promise<Checklist[]> {
+    await this.queue;
     return [...(await this.loadAll())];
   }
 
   async getById(id: string): Promise<Checklist | null> {
+    await this.queue;
     const all = await this.loadAll();
     return all.find((c) => c.id === id) ?? null;
   }

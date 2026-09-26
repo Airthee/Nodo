@@ -26,9 +26,10 @@ export function ChecklistListScreen({ onSelectChecklist }: Props) {
   const { theme } = useTheme();
   const { t } = useTranslation();
   const { listChecklists, createChecklist, deleteChecklist } = useChecklistActions();
-  const [checklists, setChecklists] = useState<Checklist[]>([]);
+  const [checklists, setChecklists] = useState<Checklist[] | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [newName, setNewName] = useState('');
+  const showEmptyState = checklists !== null && checklists.length === 0;
 
   const load = useCallback(
     (isCancelled: () => boolean = () => false) =>
@@ -94,9 +95,9 @@ export function ChecklistListScreen({ onSelectChecklist }: Props) {
         </Text>
       </View>
       <FlatList
-        data={checklists}
+        data={checklists ?? []}
         keyExtractor={(c) => c.id}
-        contentContainerStyle={[styles.list, checklists.length === 0 && styles.listEmpty]}
+        contentContainerStyle={[styles.list, showEmptyState && styles.listEmpty]}
         renderItem={({ item }) => (
           <ChecklistCard
             checklist={item}
@@ -105,21 +106,23 @@ export function ChecklistListScreen({ onSelectChecklist }: Props) {
           />
         )}
         ListEmptyComponent={
-          <View style={styles.emptyState}>
-            <NoDataIllustration
-              width={styles.emptyStateIllustration.width}
-              height={styles.emptyStateIllustration.height}
-              style={styles.emptyStateIllustration}
-            />
-            <Text
-              style={[
-                styles.emptyStateText,
-                { color: theme.colors.textSecondary, ...theme.typography.body },
-              ]}
-            >
-              {t('listScreen.empty')}
-            </Text>
-          </View>
+          showEmptyState ? (
+            <View style={styles.emptyState}>
+              <NoDataIllustration
+                width={styles.emptyStateIllustration.width}
+                height={styles.emptyStateIllustration.height}
+                style={styles.emptyStateIllustration}
+              />
+              <Text
+                style={[
+                  styles.emptyStateText,
+                  { color: theme.colors.textSecondary, ...theme.typography.body },
+                ]}
+              >
+                {t('listScreen.empty')}
+              </Text>
+            </View>
+          ) : null
         }
       />
       <View style={styles.fabContainer} pointerEvents="box-none">

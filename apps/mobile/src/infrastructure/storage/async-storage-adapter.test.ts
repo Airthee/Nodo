@@ -136,6 +136,22 @@ describe('AsyncStorageAdapter', () => {
     expect(stored).toEqual([true, true]);
   });
 
+  it('lets a read issued right after an unflushed update observe the mutation', async () => {
+    const adapter = new AsyncStorageAdapter();
+    const list = Checklist.create('l', 'Todo', { items: [item('i1', 'One')], createdAt: 40 });
+    await adapter.save(list);
+
+    void adapter.update('l', (current) =>
+      Checklist.create(current.id, current.name, {
+        items: current.items.map((i) => i.toggle()),
+        createdAt: current.createdAt,
+      }),
+    );
+    const got = await adapter.getById('l');
+
+    expect(got?.items.map((i) => i.checked)).toEqual([true]);
+  });
+
   it('resolves null without writing when updating an unknown id', async () => {
     const adapter = new AsyncStorageAdapter();
     const mutate = mock((current: Checklist) => current);
