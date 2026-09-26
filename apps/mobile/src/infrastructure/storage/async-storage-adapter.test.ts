@@ -116,6 +116,46 @@ describe('AsyncStorageAdapter', () => {
     expect(fakeStorage.getItem).toHaveBeenCalledTimes(1);
   });
 
+  it('applies two same-tick updates of one checklist on top of each other', async () => {
+    const adapter = new AsyncStorageAdapter();
+    const list = Checklist.create('l', 'Todo', { items: [item('i1', 'One'), item('i2', 'Two')], createdAt: 40 });
+    await adapter.save(list);
+
+    const toggle = (itemId: string) => (current: Checklist) =>
+      Checklist.create(current.id, current.name, {
+        items: current.items.map((i) => (i.id === itemId ? i.toggle() : i)),
+        createdAt: current.createdAt,
+      });
+
+    const [first, second] = await Promise.all([adapter.update('l', toggle('i1')), adapter.update('l', toggle('i2'))]);
+
+    expect(first?.items.map((i) => i.checked)).toEqual([true, false]);
+    expect(second?.items.map((i) => i.checked)).toEqual([true, true]);
+    expect((await adapter.getById('l'))?.items.map((i) => i.checked)).toEqual([true, true]);
+    const stored = (await new AsyncStorageAdapter().getById('l'))?.items.map((i) => i.checked);
+    expect(stored).toEqual([true, true]);
+  });
+
+  it('resolves null without writing when updating an unknown id', async () => {
+    const adapter = new AsyncStorageAdapter();
+    const mutate = mock((current: Checklist) => current);
+
+    expect(await adapter.update('missing', mutate)).toBeNull();
+    expect(mutate).not.toHaveBeenCalled();
+    expect(fakeStorage.setItem).toHaveBeenCalledTimes(0);
+  });
+
+  it('skips the write when mutate returns the same instance', async () => {
+    const adapter = new AsyncStorageAdapter();
+    await adapter.save(a);
+    fakeStorage.setItem.mockClear();
+
+    const result = await adapter.update('a', (current) => current);
+
+    expect(result).toBe(a);
+    expect(fakeStorage.setItem).toHaveBeenCalledTimes(0);
+  });
+
   it('returns a copy so callers cannot mutate the cache', async () => {
     const adapter = new AsyncStorageAdapter();
     await adapter.save(a);

@@ -39,6 +39,21 @@ export class AsyncStorageAdapter implements ChecklistStoragePort {
     });
   }
 
+  update(id: string, mutate: (current: Checklist) => Checklist): Promise<Checklist | null> {
+    return this.enqueue(async () => {
+      const all = await this.loadAll();
+      const index = all.findIndex((c) => c.id === id);
+      if (index < 0) return null;
+      const current = all[index];
+      const updated = mutate(current);
+      if (updated === current) return current;
+      const next = all.map((c, i) => (i === index ? updated : c));
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      this.cache = next;
+      return updated;
+    });
+  }
+
   delete(id: string): Promise<void> {
     return this.enqueue(async () => {
       const all = await this.loadAll();
