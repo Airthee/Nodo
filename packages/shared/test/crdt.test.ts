@@ -57,6 +57,15 @@ describe('createDeviceClock', () => {
     expect(clock.next()).toBeGreaterThan(issued);
   });
 
+  it('ignores non-finite observed ts', () => {
+    const clock = createDeviceClock(0, () => 1_000);
+    const issued = clock.next();
+    clock.observe(NaN);
+    clock.observe(Infinity);
+    expect(clock.current()).toBe(issued);
+    expect(clock.next()).toBe(issued + 1);
+  });
+
   it('seeds current() with the initial value', () => {
     const clock = createDeviceClock(42, () => 0);
     expect(clock.current()).toBe(42);
