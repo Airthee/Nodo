@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -16,6 +16,7 @@ import { useTranslation } from '../../i18n';
 import { ChecklistCard } from '../components/ChecklistCard';
 import { reportError } from '../utils/report-error';
 import { styles } from './ChecklistListScreen.style';
+import NoDataIllustration from '../../../assets/undraw_no-data_ig65.svg';
 
 type Props = {
   onSelectChecklist: (id: string) => void;
@@ -29,27 +30,24 @@ export function ChecklistListScreen({ onSelectChecklist }: Props) {
   const [modalVisible, setModalVisible] = useState(false);
   const [newName, setNewName] = useState('');
 
-  async function load() {
-    try {
-      const list = await listChecklists.execute();
-      setChecklists(list);
-    } catch (error) {
-      reportError(error);
-    }
-  }
+  const load = useCallback(
+    (isCancelled: () => boolean = () => false) =>
+      listChecklists
+        .execute()
+        .then((list) => {
+          if (!isCancelled()) setChecklists(list);
+        })
+        .catch(reportError),
+    [listChecklists]
+  );
 
   useEffect(() => {
     let cancelled = false;
-    listChecklists
-      .execute()
-      .then((list) => {
-        if (!cancelled) setChecklists(list);
-      })
-      .catch(reportError);
+    load(() => cancelled);
     return () => {
       cancelled = true;
     };
-  }, [listChecklists]);
+  }, [load]);
 
   const handleAddChecklist = async () => {
     const name = newName.trim();
@@ -108,6 +106,11 @@ export function ChecklistListScreen({ onSelectChecklist }: Props) {
         )}
         ListEmptyComponent={
           <View style={styles.emptyState}>
+            <NoDataIllustration
+              width={styles.emptyStateIllustration.width}
+              height={styles.emptyStateIllustration.height}
+              style={styles.emptyStateIllustration}
+            />
             <Text
               style={[
                 styles.emptyStateText,

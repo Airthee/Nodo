@@ -54,6 +54,8 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   emptyStateIllustration: {
+    width: 200,
+    height: 195,
     marginBottom: 24,
   },
   emptyStateText: {
