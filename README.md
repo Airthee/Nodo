@@ -19,6 +19,7 @@ bun run mobile:android  # Run on Android
 bun run mobile:ios      # Run on iOS (macOS)
 bun run mobile:lint     # Lint the mobile app
 bun run shared:test     # Run @nodo/shared tests
+bun run mobile:test:ui  # Run the mobile UI journey tests (Jest + React Native Testing Library)
 ```
 
 ## Releases (release-it + GitHub)

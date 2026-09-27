@@ -15,7 +15,8 @@
     "server:test": "bun --cwd=apps/server test",
     "shared:test": "bun --cwd=packages/shared test",
     "release": "bun --cwd=apps/mobile run release",
-    "release:ci": "bun --cwd=apps/mobile run release:ci"
+    "release:ci": "bun --cwd=apps/mobile run release:ci",
+    "mobile:test:ui": "bun --cwd=apps/mobile run test:ui"
   },
   "overrides": {
     "zod-validation-error": "^4.0.2"

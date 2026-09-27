@@ -46,6 +46,9 @@ export function ChecklistItemRow({ item, onToggle, onDelete, onEditLabel }: Prop
           onPress={onToggle}
           activeOpacity={0.7}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          accessibilityRole="checkbox"
+          accessibilityState={{ checked: item.checked }}
+          accessibilityLabel={item.label}
         >
           <View
             style={[

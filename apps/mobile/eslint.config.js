@@ -14,6 +14,11 @@ module.exports = defineConfig([
     languageOptions: { globals: globals.node },
   },
   {
+    // jest.mock factories are hoisted above imports, so they must use require().
+    files: ['jest/**'],
+    rules: { '@typescript-eslint/no-require-imports': 'off' },
+  },
+  {
     ignores: ['dist/*'],
   },
 ]);

@@ -78,6 +78,7 @@ export function AddItemInput({
               ]}
               onPress={() => handleSuggestionPress(label)}
               activeOpacity={0.7}
+              accessibilityRole="button"
             >
               <Text
                 style={[

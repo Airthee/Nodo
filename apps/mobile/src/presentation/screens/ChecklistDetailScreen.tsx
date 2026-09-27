@@ -157,6 +157,7 @@ export function ChecklistDetailScreen({ checklistId, onBack }: Props) {
                   onPress={() => setCheckedSectionExpanded((current) => !current)}
                   activeOpacity={0.7}
                   accessibilityRole="button"
+                  accessibilityState={{ expanded: checkedSectionExpanded }}
                 >
                   <Text
                     style={[
