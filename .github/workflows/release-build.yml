@@ -1,4 +1,4 @@
-# On each GitHub release publish:
+# On each GitHub release publish (or manually for an existing release tag):
 # 1. Build Android locally (expo prebuild + Gradle) → APK
 # 2. Attach the APK to the release (no Play Store publish)
 #
@@ -9,15 +9,24 @@ name: Release build
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing release tag to build (e.g. v0.3.0)"
+        required: true
 
 jobs:
   build-and-attach:
     runs-on: ubuntu-latest
     permissions:
       contents: write  # required to attach the APK to the release
+    env:
+      TAG: ${{ github.event.release.tag_name || inputs.tag }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -39,7 +48,9 @@ jobs:
           java-version: "17"
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
+        with:
+          log-accepted-android-sdk-licenses: false
 
       - name: Install Android platform and build-tools
         run: |
@@ -55,13 +66,13 @@ jobs:
 
       - name: Prepare release artifact
         run: |
-          cp apps/mobile/android/app/build/outputs/apk/release/app-release.apk "nodo-android-${{ github.event.release.tag_name }}.apk"
+          cp apps/mobile/android/app/build/outputs/apk/release/app-release.apk "nodo-android-${{ env.TAG }}.apk"
 
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.event.release.tag_name }}
-          files: "nodo-android-${{ github.event.release.tag_name }}.apk"
+          tag_name: ${{ env.TAG }}
+          files: "nodo-android-${{ env.TAG }}.apk"
           fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
