@@ -1,0 +1,76 @@
+# Reusable Android build (expo prebuild + Gradle) → release APK.
+#
+# Called by both CI and the release workflow so that every pull request runs
+# the exact steps a release depends on: a change that would break the release
+# build fails CI first.
+
+name: Android build
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: "Git ref to build (defaults to the triggering ref)"
+        type: string
+        default: ""
+      upload-artifact:
+        description: "Upload the APK as the `nodo-android-apk` workflow artifact"
+        type: boolean
+        default: false
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Setup Gradle (dependency cache)
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v4
+        with:
+          log-accepted-android-sdk-licenses: false
+
+      - name: Install Android platform and build-tools
+        run: |
+          sdkmanager "platforms;android-36" "build-tools;36.0.0"
+
+      - name: Expo prebuild (Android)
+        working-directory: apps/mobile
+        run: bunx expo prebuild --platform android --clean --no-install
+
+      - name: Build APK (release)
+        working-directory: apps/mobile/android
+        run: ./gradlew assembleRelease --no-daemon
+
+      - name: Upload APK artifact
+        if: inputs.upload-artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nodo-android-apk
+          path: apps/mobile/android/app/build/outputs/apk/release/app-release.apk
+          if-no-files-found: error
+          retention-days: 7

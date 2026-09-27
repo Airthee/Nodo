@@ -1,0 +1,96 @@
+# On every pull request and every push to main:
+# - build: the same Android build (prebuild + Gradle) as the release workflow,
+#   so a change that would break a release fails here first
+# - lint: ESLint on the mobile app and a typecheck of every workspace
+# - unit-tests: bun test in every workspace
+# - integration-tests: UI journey tests (Jest + React Native Testing Library)
+
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    uses: ./.github/workflows/android-build.yml
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Lint mobile
+        run: bun run mobile:lint
+
+      - name: Typecheck mobile
+        working-directory: apps/mobile
+        run: bun run typecheck
+
+      - name: Typecheck server
+        working-directory: apps/server
+        run: bun run typecheck
+
+      - name: Typecheck shared
+        working-directory: packages/shared
+        run: bun run typecheck
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Test mobile
+        working-directory: apps/mobile
+        run: bun test
+
+      - name: Test server
+        run: bun run server:test
+
+      - name: Test shared
+        run: bun run shared:test
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: UI journey tests
+        run: bun run mobile:test:ui -- --ci
