@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -25,6 +25,7 @@ export function ChecklistItemRow({ item, onToggle, onDelete, onEditLabel }: Prop
   const { t } = useTranslation();
   const [editVisible, setEditVisible] = useState(false);
   const [draftLabel, setDraftLabel] = useState(item.label);
+  const inputRef = useRef<TextInput>(null);
 
   const openEdit = () => {
     setDraftLabel(item.label);
@@ -122,8 +123,11 @@ export function ChecklistItemRow({ item, onToggle, onDelete, onEditLabel }: Prop
                 onChangeText={setDraftLabel}
                 placeholder={t('itemRow.labelPlaceholder')}
                 placeholderTextColor={theme.colors.textSecondary}
+                ref={inputRef}
                 autoFocus
-                selectTextOnFocus
+                // Not `selectTextOnFocus`: on Android it is re-applied with every keystroke
+                // and selects the whole text again. Selecting once on focus avoids that.
+                onFocus={() => inputRef.current?.setSelection(0, draftLabel.length)}
               />
               <View style={styles.modalActions}>
                 <TouchableOpacity
