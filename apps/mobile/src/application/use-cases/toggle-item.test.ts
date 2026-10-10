@@ -26,6 +26,18 @@ describe('ToggleItemUseCase', () => {
     expect(storage.writes).toBe(1);
   });
 
+  it('stamps the check time and clears it when unchecked again', async () => {
+    const { useCase } = setup();
+    const before = Date.now();
+
+    const checked = await useCase.execute('l', 'milk');
+    const checkedAt = checked?.items.find((i) => i.id === 'milk')?.checkedAt;
+    expect(checkedAt).toBeGreaterThanOrEqual(before);
+
+    const unchecked = await useCase.execute('l', 'milk');
+    expect(unchecked?.items.find((i) => i.id === 'milk')?.checkedAt).toBeUndefined();
+  });
+
   it('returns null without writing when the item is unknown', async () => {
     const { storage, useCase } = setup();
 

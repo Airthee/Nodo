@@ -4,14 +4,22 @@ export class ChecklistItem {
     public readonly label: string,
     public readonly checked: boolean,
     public readonly addedAt: number,
+    public readonly checkedAt?: number,
   ) {}
 
-  static create(id: string, label: string, options?: { checked?: boolean; addedAt?: number }): ChecklistItem {
-    return new ChecklistItem(id, label.trim(), options?.checked ?? false, options?.addedAt ?? Date.now());
+  static create(
+    id: string,
+    label: string,
+    options?: { checked?: boolean; addedAt?: number; checkedAt?: number },
+  ): ChecklistItem {
+    const checked = options?.checked ?? false;
+    return new ChecklistItem(id, label.trim(), checked, options?.addedAt ?? Date.now(), checked ? options?.checkedAt : undefined);
   }
 
-  public toggle(): ChecklistItem {
-    return new ChecklistItem(this.id, this.label, !this.checked, this.addedAt);
+  /** Flips the checked state, stamping checkedAt when checking and clearing it when unchecking. */
+  public toggle(at = Date.now()): ChecklistItem {
+    const checked = !this.checked;
+    return new ChecklistItem(this.id, this.label, checked, this.addedAt, checked ? at : undefined);
   }
 
   /** Returns an unchecked copy with a refreshed addedAt, keeping id and label. */
@@ -20,6 +28,6 @@ export class ChecklistItem {
   }
 
   public withLabel(newLabel: string): ChecklistItem {
-    return new ChecklistItem(this.id, newLabel.trim(), this.checked, this.addedAt);
+    return new ChecklistItem(this.id, newLabel.trim(), this.checked, this.addedAt, this.checkedAt);
   }
 }

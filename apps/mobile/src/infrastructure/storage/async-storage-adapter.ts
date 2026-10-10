@@ -5,12 +5,12 @@ import type { ChecklistStoragePort } from '../../application/ports/storage-port'
 
 const STORAGE_KEY = '@nodo/data';
 
-type RawItem = { id: string; label: string; checked: boolean; addedAt: number };
+type RawItem = { id: string; label: string; checked: boolean; addedAt: number; checkedAt?: number };
 type RawChecklist = { id: string; name: string; items: RawItem[]; createdAt: number };
 
 function rehydrateChecklist(raw: RawChecklist): Checklist {
   const items = raw.items.map((i) =>
-    ChecklistItem.create(i.id, i.label, { checked: i.checked, addedAt: i.addedAt }),
+    ChecklistItem.create(i.id, i.label, { checked: i.checked, addedAt: i.addedAt, checkedAt: i.checkedAt }),
   );
   return Checklist.create(raw.id, raw.name, { items, createdAt: raw.createdAt });
 }

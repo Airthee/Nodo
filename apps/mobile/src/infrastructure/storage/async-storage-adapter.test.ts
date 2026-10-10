@@ -54,6 +54,15 @@ describe('AsyncStorageAdapter', () => {
     expect(all[0]).toEqual(a);
   });
 
+  it('persists when an item was checked', async () => {
+    const checkedMilk = ChecklistItem.create('m', 'Milk', { checked: true, addedAt: 1, checkedAt: 42 });
+    await new AsyncStorageAdapter().save(Checklist.create('l', 'Groceries', { items: [checkedMilk], createdAt: 1 }));
+
+    const stored = await new AsyncStorageAdapter().getById('l');
+
+    expect(stored?.items[0].checkedAt).toBe(42);
+  });
+
   it('keeps both checklists when two saves start without awaiting in between', async () => {
     const adapter = new AsyncStorageAdapter();
 

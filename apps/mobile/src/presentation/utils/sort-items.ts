@@ -14,3 +14,7 @@ export function sortChecklistItems(
   }
   return copy;
 }
+
+export function sortByLastChecked(items: ChecklistItem[]): ChecklistItem[] {
+  return [...items].sort((a, b) => (b.checkedAt ?? 0) - (a.checkedAt ?? 0));
+}

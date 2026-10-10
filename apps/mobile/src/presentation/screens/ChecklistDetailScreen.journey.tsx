@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@jest/globals';
+import { describe, expect, it, jest } from '@jest/globals';
 import { screen, userEvent } from '@testing-library/react-native';
 import React from 'react';
 import { InMemoryStorage } from '@application/test-helpers/in-memory-storage';
@@ -57,6 +57,27 @@ describe('Checklist detail journeys', () => {
 
     expect(checkedSectionHeader(1)).toBeExpanded();
     expect(screen.getByRole('checkbox', { name: 'Milk' })).toBeChecked();
+  });
+
+  it('lists checked items from the most recently checked one', async () => {
+    // A strictly increasing clock keeps two quick checks from sharing a timestamp.
+    let now = 1_000;
+    const clock = jest.spyOn(Date, 'now').mockImplementation(() => now++);
+    const { user } = await openGroceries([
+      ChecklistItem.create('bread', 'Bread', { checked: true, addedAt: 30, checkedAt: 100 }),
+      ChecklistItem.create('milk', 'Milk', { addedAt: 20 }),
+      ChecklistItem.create('eggs', 'Eggs', { addedAt: 10 }),
+    ]);
+
+    await user.press(await inMainList('Milk'));
+    await user.press(await inMainList('Eggs'));
+    await user.press(checkedSectionHeader(3));
+
+    const checkedLabels = screen
+      .getAllByRole('checkbox', { checked: true })
+      .map((checkbox) => checkbox.props.accessibilityLabel as string);
+    expect(checkedLabels).toEqual(['Eggs', 'Milk', 'Bread']);
+    clock.mockRestore();
   });
 
   it('brings an unchecked item back to the main list', async () => {

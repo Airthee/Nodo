@@ -14,7 +14,7 @@ import { useTranslation } from '../../i18n';
 import { ChecklistItemRow } from '../components/ChecklistItemRow';
 import { AddItemInput } from '../components/AddItemInput';
 import { SortPicker } from '../components/SortPicker';
-import { sortChecklistItems, type ItemSortOrder } from '../utils/sort-items';
+import { sortByLastChecked, sortChecklistItems, type ItemSortOrder } from '../utils/sort-items';
 import { generateId } from '../../application/utils/id';
 import { reportError } from '../utils/report-error';
 import { ChecklistItem } from '@domain/checklist-item';
@@ -115,7 +115,7 @@ export function ChecklistDetailScreen({ checklistId, onBack }: Props) {
 
   const sortedItems = sortChecklistItems(checklist.items, sortOrder);
   const uncheckedItems = sortedItems.filter((item) => !item.checked);
-  const checkedItems = sortedItems.filter((item) => item.checked);
+  const checkedItems = sortByLastChecked(sortedItems.filter((item) => item.checked));
   const checkedLabels = checkedItems.map((item) => item.label);
 
   return (
